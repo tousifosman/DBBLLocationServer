@@ -2,7 +2,8 @@
     pageEncoding="ISO-8859-1"%>
 <jsp:useBean id="loginBean" class="beans.Login"></jsp:useBean>
 <jsp:setProperty property="*" name="loginBean"/>
-<% if( request.getMethod().equalsIgnoreCase("POST") && request.getParameter("submit") != null) loginBean.login(); %>
+<% if( request.getMethod().equalsIgnoreCase("POST") && request.getParameter("submit") != null) 
+	loginBean.login(request, response, session); %>
 <!DOCTYPE html>
 <html>
 <head>

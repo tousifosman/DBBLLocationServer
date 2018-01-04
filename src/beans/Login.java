@@ -1,5 +1,13 @@
 package beans;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import model.Admin;
+
 public class Login {
 	
 	private String messege;
@@ -28,15 +36,6 @@ public class Login {
 		this.password = password;
 	}
 
-	public boolean isHasMessege() {
-		return hasMessege;
-	}
-
-	public void setHasMessege(boolean hasMessege) {
-		this.hasMessege = hasMessege;
-	}
-
-
 	public String getMessege() {
 		return messege;
 	}
@@ -49,9 +48,23 @@ public class Login {
 		return hasMessege;
 	}
 	
-	public boolean login() {
-		System.out.println("In login");
-		return true;
+	public boolean login(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		Admin admin = new Admin().initByUsernamePassword(username, password);
+		hasMessege = true;
+		if(admin != null) {
+			try {
+				session.setAttribute("session", true);
+				session.setAttribute("admin", admin);
+				response.sendRedirect("locations.jsp");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				messege = "Server error";
+				e.printStackTrace();
+			}
+			return true;
+		}
+		messege = "Wrong username or password";
+		return false;
 	}
 
 }
