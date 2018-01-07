@@ -37,8 +37,6 @@ public class Zone {
 
 	public static boolean save(String name) {
 		try {
-			System.out.println("INSERT INTO zones (name) VALUES ('"+ name +"');");
-			
 			PreparedStatement preparedStatement = DB.getInstance()
 					.getConnection()
 					.prepareStatement("INSERT INTO zones (name) VALUES (?)");
@@ -46,7 +44,6 @@ public class Zone {
 			preparedStatement.setString(1, name);
 			preparedStatement.execute();
 			
-			//DB.getInstance().query("INSERT INTO zones (name) VALUES ('"+ name +"');");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,6 +53,21 @@ public class Zone {
 		
 		System.out.println("model.Zone: Zone saved");
 		
+		return true;
+	}
+	
+	public static boolean deleteZoneByID(int id){
+		try {
+			PreparedStatement preparedStatement=  DB.getInstance()
+					.getConnection().prepareStatement("DELETE FROM zones WHERE id = ?");
+			preparedStatement.setInt(1, id);
+			preparedStatement.execute();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 		return true;
 	}
 

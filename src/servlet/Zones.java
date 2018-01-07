@@ -33,8 +33,8 @@ public class Zones extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		if(!validateSession(request, response))
-			return;
+//		if(!validateSession(request, response))
+//			return;
 		
 		if(request.getParameter("get") != null && request.getParameter("get").equals("all")) {
 			response.setContentType("application/json");
@@ -42,8 +42,7 @@ public class Zones extends HttpServlet {
 			ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 			
 			response.getOutputStream().println(objectWriter.writeValueAsString(model.Zones.getALL()));
-		}
-		
+		}	
 	}
 
 	/**
@@ -62,6 +61,21 @@ public class Zones extends HttpServlet {
 				return;
 			}	
 		}
+		
+		if(request.getParameter("delete") != null) {
+			System.out.println(request.getParameter("delete"));
+			try {
+				if (Zone.deleteZoneByID(Integer.parseInt(request.getParameter("delete")))){
+					response.getOutputStream().println("success");
+					System.out.println("success");
+					return;
+				};
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+		}
+	
+		
 		response.getOutputStream().println("failed");
 	}
 	
