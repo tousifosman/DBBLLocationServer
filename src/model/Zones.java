@@ -15,7 +15,7 @@ public class Zones {
 			ResultSet resultSet = DB.getInstance().query("SELECT * FROM zones;");
 			
 			LinkedList<Zone> zones = new LinkedList<Zone>();
-			
+			zones.add(new Zone(0, "All"));
 			while(resultSet.next()){
 				zones.add(new Zone(
 						resultSet.getInt("id"),

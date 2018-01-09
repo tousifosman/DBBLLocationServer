@@ -37,12 +37,32 @@ public class Locations extends HttpServlet {
 //		if(!validateSession(request, response))
 //			return;
 		
-		if(request.getParameter("get") != null && request.getParameter("get").equals("all")) {
-			response.setContentType("application/json");
+		
+		response.setContentType("application/json");
+		if(request.getParameter("get") != null) {
+			
+			model.Location[] locations = new model.Location[0];
+			
+			if ( request.getParameter("get").equals("all")) {
+				
+				if(request.getParameter("zone") != null) {
+					
+					if (request.getParameter("zone").equals("0")){
+						locations = model.Locations.getAll();
+					} else {
+						locations = model.Locations.getByZone(
+								Integer.parseInt(request.getParameter("zone"))
+						);
+					}
+					
+				} else {
+					locations = model.Locations.getAll();
+				}
+			}
 			
 			ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 			
-			response.getOutputStream().println(objectWriter.writeValueAsString(model.Locations.getAll()));
+			response.getOutputStream().println(objectWriter.writeValueAsString(locations));
 		}
 		
 	}

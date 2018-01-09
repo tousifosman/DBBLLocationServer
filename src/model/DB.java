@@ -10,7 +10,7 @@ public class DB {
 
 	private static String username = "dbbl_location_server";
 	private static String password = "";
-	private static String database = "DBBLLocationServer";
+	private static String database = "dbbl_location_server";
 	
 	private Connection connection = null;
 	
