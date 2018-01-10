@@ -107,4 +107,30 @@ public class Location {
 		return false;
 	}
 	
+	public static boolean update(int id, String name, String address, int zone, double latitude, double longitude) {
+		
+		try {
+			PreparedStatement preparedStatement = DB.getInstance()
+					.getConnection().prepareStatement(
+							"UPDATE locations"
+							+ " SET  name = ?, address = ?, latitude = ?, longitude = ?, zone = ?"
+							+ " WHERE id = ?");
+			preparedStatement.setString(1, name);
+			preparedStatement.setString(2, address);
+			preparedStatement.setDouble(3, latitude);
+			preparedStatement.setDouble(4, longitude);
+			preparedStatement.setInt(5, zone);
+			preparedStatement.setInt(6, id);
+			
+			preparedStatement.execute();
+			preparedStatement.close();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
 }

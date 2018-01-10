@@ -73,11 +73,30 @@ public class Locations extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-//		if(!validateSession(request, response))
-//			return;
+		if(!validateSession(request, response))
+			return;
 		
 		response.setContentType("text/text");
-		if(Boolean.parseBoolean(request.getParameter("add")) == true) {
+		if(Boolean.parseBoolean(request.getParameter("update")) == true) {
+			
+			if(Location
+					.update(Integer.parseInt(request.getParameter("id")), 
+							request.getParameter("name"), 
+							request.getParameter("address"), 
+							Integer.parseInt(request.getParameter("zone")),
+							Double.parseDouble(request.getParameter("latitude")),
+							Double.parseDouble(request.getParameter("longitude")))){
+				response.getOutputStream().println("success");
+				return;
+			}
+			
+			System.out.println("update");
+			
+			
+			
+			response.getOutputStream().println("success");
+			return;
+		} else if(Boolean.parseBoolean(request.getParameter("add")) == true) {
 			if(Location
 					.save(request.getParameter("name"), 
 							request.getParameter("address"), 

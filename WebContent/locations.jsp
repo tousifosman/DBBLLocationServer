@@ -322,7 +322,7 @@ if( session.getAttribute("session") == null || !(Boolean) session.getAttribute("
 	      	<div class="row">
 	      		<div class="col-md-6"><h5 class="messege text-left"></h5></div>
 		      	<div class="col-md-3"><button type="button" class="btn btn-default" style="width: 100%" data-dismiss="modal">Close</button></div>
-		      	<div class="col-md-3"><button id="btn-add-location" type="button" style="width: 100%" class="btn btn-primary">Add Location</button></div>
+		      	<div class="col-md-3"><button id="btn-add-location" type="button" style="width: 100%" class="btn btn-primary">Save Location</button></div>
 	      	</div>
 	      </div>
 	    </div>
@@ -334,7 +334,11 @@ if( session.getAttribute("session") == null || !(Boolean) session.getAttribute("
       // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
       function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
+    	
+    	/** 
+    	 * Global variable map
+    	 */
+        map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: -33.8688, lng: 151.2195},
           zoom: 13
         });
@@ -355,7 +359,10 @@ if( session.getAttribute("session") == null || !(Boolean) session.getAttribute("
         var infowindow = new google.maps.InfoWindow();
         var infowindowContent = document.getElementById('infowindow-content');
         infowindow.setContent(infowindowContent);
-        var marker = new google.maps.Marker({
+        /**
+         * Global Marker
+         */
+        marker = new google.maps.Marker({
           map: map,
           anchorPoint: new google.maps.Point(0, -29)
         });

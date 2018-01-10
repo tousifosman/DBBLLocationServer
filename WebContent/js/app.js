@@ -1,9 +1,35 @@
+function editLocation(e){
+	locationFlag = "edit"
+	console.log(e)
+	$("#add-location").modal()
+	var tds = $(e).find("td");
+	tdsx = tds
+	var lat = tds[3].innerHTML;
+	var lng = tds[4].innerHTML;
+	
+	$("#name").val(tds[1].innerHTML);	
+	$("#address").val(tds[2].innerHTML);	
+	$("#latitude").val(lat);	
+	$("#longitude").val(lng);
+	//console.log($("#form-add-location select option"))
+	//$("#form-add-location select").val(tdsx[5].innerText)
+	
+	selectedZoneId = tdsx[5].innerText
+	selectedLocationId = tdsx[0].innerText
+	
+	var latLng = new google.maps.LatLng(lat, lng);
+	
+	marker.setPosition(latLng)
+	map.setCenter(latLng);
+    map.setZoom(17);
+	$("#pac-input").val(tds[1].innerHTML)
+}
 window.addEventListener("load", function() {
 	function updateLocations() {
 		$.getJSON('Locations', {get: 'all'}, function(data){
 	    	var locationHTML = "";
 	    	for(var i in data) {
-	    		locationHTML += '<tr data-id="'+data[i].id+'" onclick="editLocation">'
+	    		locationHTML += '<tr data-id="'+data[i].id+'" onclick="editLocation(this)">'
 	    			+ '<td>'+data[i].id+'</td>'
 	    			+ '<td>'+data[i].name + '</td>'
 	    			+ '<td>'+data[i].address + '</td>'
@@ -19,10 +45,12 @@ window.addEventListener("load", function() {
 	updateLocations();
 	$(".modal.fade").on("hidden.bs.modal", function () {
 		updateLocations();
+		locationFlag = ""
 	});
-	function editLocation(){
-		console.log(this)
-	}
+	
+	$(".modal.fade").on('shown.bs.modal', function () {
+	
+	});
 	$("#add-zone-button").click(function() {
 		$.post('Zones', {add: true, name: $("#add-zone form input[name=name]").val()}, "json")
 			.done(function(result) {
@@ -71,12 +99,15 @@ window.addEventListener("load", function() {
 	
 	
 	$("#add-location").on('shown.bs.modal', function(){
+		google.maps.event.trigger(map, 'resize');
 		$.getJSON('Zones', {get: 'all'}, function(data){
 	    	var zoneHTML = "";
 	    	for(var i in data) {
 	    		zoneHTML += '<option value="'+data[i].id+'">'+data[i].name+'</option>';
 	    	}
 	    	$("#add-location select").html(zoneHTML);
+	    	if (locationFlag == "edit")
+	    		$("#form-add-location select").val(selectedZoneId)
 		})
 	})
 	
@@ -85,7 +116,10 @@ window.addEventListener("load", function() {
 		$("#form-add-location").serializeArray().map(function(x){
 			data[x.name] = x.value;
 		});
-		console.log(data);
+		if (locationFlag == "edit") {
+			data["update"] = true
+			data["id"] = selectedLocationId
+		}
 		$.post("Locations", data, "JSON")
 			.done(function(result) {
 				if( result.trim() == 'success' ) {
@@ -93,7 +127,7 @@ window.addEventListener("load", function() {
 						.removeClass("text-danger")
 						.addClass("text-success")
 						.html('success <i class="glyphicon glyphicon-ok"></i>');
-					deleteZoneTd.remove();
+					//deleteZoneTd.remove();
 				} else {
 					$("#add-location .messege")
 						.removeClass("text-success")
